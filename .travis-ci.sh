@@ -4,7 +4,7 @@ case "$OCAML_VERSION" in
 *) echo Unknown $OCAML_VERSION; exit 1 ;;
 esac
 
-sudo add-apt-repository ppa:$ppa
+echo "\n" | sudo add-apt-repository ppa:$ppa
 sudo apt-get update -qq
 sudo apt-get install -qq ocaml
 
