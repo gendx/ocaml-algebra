@@ -25,24 +25,22 @@ module MakeArrayMatrix (R : Ring) (Size : IntValue) = struct
   let set (x : t) (i : int) (j : int) (v : R.t) =
     Array.set (Array.get x i) j v
   
-  let print (x : t) : unit =
+  let to_string (x : t) : string =
+    let s = ref "" in
     for i = 0 to Size.x - 1 do
-      if i = 0 then
-        print_string "["
-      else
-        print_string " ";
+      s := !s ^
+      (if i = 0 then "[" else " ");
       
       for j = 0 to Size.x - 1 do
-        if j > 0 then
-          print_string " ";
-        R.print (at x i j)
+        s := !s ^
+        (if j > 0 then " " else "") ^
+        (R.to_string (at x i j))
       done;
       
-      if i = Size.x - 1 then
-        print_string "]"
-      else
-        print_newline ();
-    done
+      s := !s ^
+      (if i = Size.x - 1 then "]" else "\n")
+    done;
+    !s
   
   
   let of_vects (x : Vector.t) (y : Vector.t) : t =

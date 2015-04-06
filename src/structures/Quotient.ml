@@ -16,8 +16,8 @@ module MakeQuotient (R : EuclidianRing) (V : Value with type t = R.t) = struct
   type t = R.t
   
   
-  let print (p : t) : unit =
-    R.print p
+  let to_string (p : t) : string =
+    R.to_string p
   
   
   let make (p : R.t) : t =

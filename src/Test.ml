@@ -11,20 +11,20 @@ module Test = struct
     let pz = make_qmultipoly_of_int z in
     
     print_string "spoly(";
-    QMultiPoly.print px;
+    print_string (QMultiPoly.to_string px);
     print_string ", ";
-    QMultiPoly.print py;
+    print_string (QMultiPoly.to_string py);
     print_string ") = ";
     
     let s = (QMultiPoly.spoly px py) in
-    QMultiPoly.print s;
+    print_string (QMultiPoly.to_string s);
     print_newline ();
     
     if QMultiPoly.is_zero (QMultiPoly.sub pz s) then
       true
     else (
       print_string "Unexpected result ! Expected was :";
-      QMultiPoly.print pz;
+      print_string (QMultiPoly.to_string pz);
       print_newline ();
       false
     )
@@ -56,16 +56,16 @@ module Test = struct
     *)
     
     print_string "division(";
-    QMultiPoly.print px;
+    print_string (QMultiPoly.to_string px);
     print_string ", {";
-    Array.iter (fun t -> QMultiPoly.print t; print_string ", ") pf;
+    Array.iter (fun t -> print_string (QMultiPoly.to_string t); print_string ", ") pf;
     print_string "}) = ";
     
     let q, r = QMultiPoly.division_set px pf in
     print_string "{";
-    Array.iter (fun t -> QMultiPoly.print t; print_string ", ") q;
+    Array.iter (fun t -> print_string (QMultiPoly.to_string t); print_string ", ") q;
     print_string "} + ";
-    QMultiPoly.print r;
+    print_string (QMultiPoly.to_string r);
     print_newline ();
     
     QMultiPoly.is_zero (QMultiPoly.sub pr r)
@@ -82,9 +82,9 @@ module Test = struct
     let g = List.map make_qmultipoly_of_int x in
     let base = QMultiPoly.groebner g in
     print_endline "groebner of {";
-    List.iter (fun t ->  print_string "\t"; QMultiPoly.print t; print_newline ()) g;
+    List.iter (fun t ->  print_string "\t"; print_string (QMultiPoly.to_string t); print_newline ()) g;
     print_endline "} = {";
-    List.iter (fun t ->  print_string "\t"; QMultiPoly.print t; print_newline ()) base;
+    List.iter (fun t ->  print_string "\t"; print_string (QMultiPoly.to_string t); print_newline ()) base;
     print_string "}";
     print_newline ()
     

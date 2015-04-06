@@ -21,15 +21,14 @@ module MakeVector (R : Ring) (Size : IntValue) = struct
   type t = R.t array
   
   
-  let print (x : t) : unit =
-    print_string "[";
+  let to_string (x : t) : string =
+    let s = ref "[" in
     for i = 0 to Size.x - 1 do
-      if i > 0 then
-        print_string " ";
-      
-      R.print (Array.get x i)
+      s := !s ^
+      (if i > 0 then " " else "") ^
+      (R.to_string (Array.get x i))
     done;
-    print_string "]"
+    !s ^ "]"
     
     
   let zero () : t =

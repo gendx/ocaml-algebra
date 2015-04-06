@@ -16,12 +16,12 @@ module MakeFractional (R : EuclidianRing) = struct
   type t = R.t * R.t
   
   
-  let print ((p, q) : t) : unit =
-    R.print p;
-    if not (R.is_one q) then (
-      print_string "/";
-      R.print q
-    )
+  let to_string ((p, q) : t) : string =
+    (R.to_string p) ^
+    if (R.is_one q) then
+      ""
+    else
+      ("/" ^ (R.to_string q))
   
   
   let make (p : R.t) (q : R.t) : t =

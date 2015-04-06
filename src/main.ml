@@ -19,10 +19,10 @@ let () =
   let make_qpoly_of_int = QPoly.make_of Q.of_int in
   
   let p = make_qpoly_of_int [1 ; 0 ; 1] in
-  QPoly.print_var "x" p;
+  print_string (QPoly.to_string_var "x" p);
   print_newline ();
   let p2 = QPoly.mul p p in
-  QPoly.print_var "x" p2;
+  print_string (QPoly.to_string_var "x" p2);
   print_newline ();
   
   let module QPolyPoly = SparsePolynomial.MakeSparsePolynomial(QPoly) in
@@ -43,7 +43,7 @@ let () =
   let make_poly_poly_int = SP.make_poly int_poly_ring in
   *)
   
-  let print_xy = QPolyPoly.print_var name_y in
+  let print_xy p = print_string (QPolyPoly.to_string_var name_y p) in
   
   print_xy (make_qpolypoly_of_int [[0 ; 1] ; [1]]);
   print_newline ();
@@ -68,7 +68,7 @@ let () =
   let module QMultiPoly = Common.QMultivarPoly in
   
   let make_qmultipoly_of_int = QMultiPoly.make_of Q.of_int in
-  let print_xy_mp = QMultiPoly.print_names (Array.of_list ["x" ; "exp(x)"]) in
+  let print_xy_mp p = print_string (QMultiPoly.to_string_names (Array.of_list ["x" ; "exp(x)"]) p) in
   let deriv = Array.of_list [
     make_qmultipoly_of_int [1, []] ; (* x' = 1 *)
     make_qmultipoly_of_int [1, [1, 1]] ; (* y' = y *)
@@ -97,77 +97,78 @@ let () =
   let prime = 3 in
   let module GF = Common.GF(struct let x = prime end) in
   let a = GF.of_int 10 in
-  GF.print a;
+  print_string (GF.to_string a);
   print_newline ();
-  GF.print (GF.inverse a);
+  print_string (GF.to_string (GF.inverse a));
   print_newline ();
-  GF.print (GF.opposite a);
+  print_string (GF.to_string (GF.opposite a));
   print_newline ();
   
   let module Z = Common.Z in
-  Z.print (Z.one ());
+  print_string (Z.to_string (Z.one ()));
   print_newline ();
   
-  Q.print (Q.make_of_int 15 (-35));
+  print_string (Q.to_string (Q.make_of_int 15 (-35)));
   print_newline ();
   
   print_newline ();
 
   let module GFPoly = ListPolynomial.MakeEuclidianListPolynomial(GF) in
 
-  (*
-  let module Qpoly = Structures.Qpoly in
-  let make_qpoly_of_int = Qpoly.make_of Q.of_int in
+  (**)
+  let make_qpoly_of_int = QPoly.make_of Q.of_int in
   let p = make_qpoly_of_int [5 ; 0 ; 0 ; 1] in
-  Qpoly.print p;
+  print_string (QPoly.to_string p);
   print_newline ();
-  *)
+  (**)
   
   let make_poly_of_int = GFPoly.make_of GF.of_int in
   let p = make_poly_of_int [1 ; 2 ; 0 ; 1] in
-  GFPoly.print p;
+  print_string (GFPoly.to_string p);
   print_newline ();
   
   let module GF3 = Quotient.MakeQuotient(GFPoly)(struct type t = GFPoly.t let x = p end) in
   let a = GF3.make (make_poly_of_int [0 ; 1]) in
-  GF3.print a;
+  print_string (GF3.to_string a);
   print_newline ();
   
-  (*
-  let c = Qpoly.mul a a in
-  Qpoly.print c;
+  (**)
+  let aa = make_qpoly_of_int [0 ; 1] in
+  let c = QPoly.mul aa aa in
+  print_string (QPoly.to_string c);
   print_newline ();
   
-  let q, r = Qpoly.quorem c p in
-  Qpoly.print q;
+  let pp = make_qpoly_of_int [1 ; 2 ; 0 ; 1] in
+  let q, r = QPoly.quorem c pp in
+  print_string (QPoly.to_string q);
   print_newline ();
-  Qpoly.print r;
-  print_newline ();
-  
-  Qpoly.print (Qpoly.mul p q);
-  print_newline ();
-  *)
-  
-  (*
-  let a0, b0, g0 = Qpoly.bezout_pair a p in
-  let a1 = Qpoly.quo a0 g0 in
-  let b1 = Qpoly.quo b0 g0 in
-  Qpoly.print a1;
-  print_newline ();
-  Qpoly.print b1;
-  print_newline ();
-  Qpoly.print (Qpoly.add (Qpoly.mul a1 a) (Qpoly.mul b1 p));
+  print_string (QPoly.to_string r);
   print_newline ();
   
+  print_string (QPoly.to_string (QPoly.mul pp q));
   print_newline ();
-  *)
+  (**)
+  
+  (**)
+  let a0, b0, g0 = QPoly.bezout aa pp in
+  let a1 = QPoly.quo a0 g0 in
+  let b1 = QPoly.quo b0 g0 in
+  print_string (QPoly.to_string a1);
+  print_newline ();
+  print_string (QPoly.to_string b1);
+  print_newline ();
+  print_string (QPoly.to_string (QPoly.add (QPoly.mul a1 aa) (QPoly.mul b1 pp)));
+  print_newline ();
+  
+  print_newline ();
+  (**)
   
   let b = ref a in
   for i = 2 to 30 do
     b := GF3.mul !b a;
     print_int i;
     print_string " : ";
-    GF3.print !b;
+    print_string (GF3.to_string !b);
     print_newline ();
   done;
   
@@ -177,7 +178,7 @@ let () =
     b := GF3.div !b a;
     print_int i;
     print_string " : ";
-    GF3.print !b;
+    print_string (GF3.to_string !b);
     print_newline ();
   done;
   

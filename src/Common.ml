@@ -14,7 +14,7 @@ module rec Z :
   type t = int
   module GCDImpl = GCD(Z)
   
-  let print (x : t) : unit = print_int x
+  let to_string (x : t) : string = string_of_int x
   
   let zero () : t = 0
   let one () : t = 1

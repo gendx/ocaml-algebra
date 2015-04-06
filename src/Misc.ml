@@ -26,11 +26,11 @@ module Misc = struct
       List.fold_right (fun r l -> (t, r)::l) q (pairs q)
       (*List.fold_left (fun l r -> (t, r)::l) (pairs q) q*)
   
-  let print_mono name n =
+  let mono_to_string name n =
     match n with
-    | 0 -> ()
-    | 1 -> print_string name
-    | n -> print_string name; print_string "^"; print_int n
+    | 0 -> ""
+    | 1 -> name
+    | n -> name ^ "^" ^ (string_of_int n)
 
 end
 

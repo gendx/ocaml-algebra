@@ -12,9 +12,9 @@ module Misc : sig
   (* Args    : x *)
   (* Returns : the list of pairs {y, z} with y, z are distinct elements of x *)
   val pairs: ('a list) -> (('a * 'a) list)
-  (* Args        : s, x *)
-  (* Side-effect : print monomial x with variable name s *)
-  val print_mono: string -> int -> unit
+  (* Args    : s, x *)
+  (* Returns : a printable string of the monomial x with variable name s *)
+  val mono_to_string: string -> int -> string
 end
 
 module type Value = sig

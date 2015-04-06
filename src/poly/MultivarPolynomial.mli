@@ -6,12 +6,12 @@ module type MultivarPolynomial = sig
   type ft
   include Algebra with type ft := ft and type t = (ft * MultiPower.t) list
   
-  (* Args        : f, x *)
-  (* Side-effect : print x with variable names given by f *)
-  val print_with: (int -> string) -> t -> unit
-  (* Args        : f, x *)
-  (* Side-effect : print x with variable names given by f *)
-  val print_names: string array -> t -> unit
+  (* Args    : f, x *)
+  (* Returns : a printable string of x with variable names given by f *)
+  val to_string_with: (int -> string) -> t -> string
+  (* Args    : f, x *)
+  (* Returns : a printable string of x with variable names given by f *)
+  val to_string_names: string array -> t -> string
   
   (* Args    : x *)
   (* Returns : p, the multivariate polynomial whose coefficients are the elements of x *)

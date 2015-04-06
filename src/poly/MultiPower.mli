@@ -1,12 +1,12 @@
 module MultiPower : sig
   type t = ((int * int) list) * int
   
-  (* Args        : x *)
-  (* Side-effect : print x *)
-  val print: t -> unit
-  (* Args        : f, n *)
-  (* Side-effect : print x as a monomial with variable names given by f *)
-  val print_power: (int -> string) -> t -> unit
+  (* Args    : x *)
+  (* Returns : a printable string of x *)
+  val to_string: t -> string
+  (* Args    : f, n *)
+  (* Returns : a printable string of x as a monomial with variable names given by f *)
+  val power_to_string: (int -> string) -> t -> string
   
   (* Args    : x *)
   (* Returns : p, the monomial where the non-null power n of variable y is given by *)

@@ -7,8 +7,8 @@ module type MultivarPolynomial = sig
   type ft
   include Algebra with type ft := ft and type t = (ft * MultiPower.t) list
   
-  val print_with: (int -> string) -> t -> unit
-  val print_names: string array -> t -> unit
+  val to_string_with: (int -> string) -> t -> string
+  val to_string_names: string array -> t -> string
   
   val make: (ft * ((int * int) list)) list -> t
   val make_of: ('a -> ft) -> ('a * ((int * int) list)) list -> t
@@ -49,33 +49,28 @@ module MakeMultivarPolynomial (F : Field) = struct
     
     String.concat "" (impl i)
   
-  let print_with (names : int -> string) (x : t) : unit =
-    print_string "(";
-    
-    let started = List.fold_left
-      (fun started (a, n) ->
+  let to_string_with (names : int -> string) (x : t) : string =
+    let s, started = List.fold_left
+      (fun (s, started) (a, n) ->
           if not (F.is_zero a) then (
-            if started then
-              print_string " + ";
-            if MultiPower.is_zero n || not (F.is_one a) then
-              F.print a;
-            MultiPower.print_power names n;
-            true
+            let ss =
+              (if started then " + " else "") ^
+              (if MultiPower.is_zero n || not (F.is_one a) then F.to_string a else "") ^
+              (MultiPower.power_to_string names n)
+            in
+            (s ^ ss, true)
           ) else
-            started
+            (s, started)
       )
-    false x in
+    ("", false) x in
     
-    if not started then
-      F.print (F.zero ());
-    
-    print_string ")"
+    "(" ^ (if started then s else F.to_string (F.zero ())) ^ ")"
   
-  let print (x : t) : unit =
-    print_with generate_name x
+  let to_string (x : t) : string =
+    to_string_with generate_name x
   
-  let print_names (names : string array) (x : t) : unit =
-    print_with (Array.get names) x
+  let to_string_names (names : string array) (x : t) : string =
+    to_string_with (Array.get names) x
   
   
   let clean (x : t) : t =
@@ -282,9 +277,9 @@ module MakeMultivarPolynomial (F : Field) = struct
         
         if not (is_zero (sub t r)) then (
           print_string "reduction : ";
-          print t;
+          print_string (to_string t);
           print_string " -> ";
-          print r;
+          print_string (to_string r);
           print_newline ();
         );
         
@@ -324,9 +319,9 @@ module MakeMultivarPolynomial (F : Field) = struct
         
         if MultiPower.is_zero (MultiPower.gcd na nb) then (
           print_string "relatively prime : ";
-          print a;
+          print_string (to_string a);
           print_string " & ";
-          print b;
+          print_string (to_string b);
           print_newline ();
           
           groebner_impl polys q
@@ -335,13 +330,13 @@ module MakeMultivarPolynomial (F : Field) = struct
           let _, rr = division_set s (Array.of_list polys) in
           let r = normalize rr in
           
-          print a;
+          print_string (to_string a);
           print_string " & ";
-          print b;
+          print_string (to_string b);
           print_string " = ";
-          print s;
+          print_string (to_string s);
           print_string " -> ";
-          print r;
+          print_string (to_string r);
           print_newline ();
           
           if is_zero r then
@@ -349,9 +344,9 @@ module MakeMultivarPolynomial (F : Field) = struct
           else (
             let reduced = reduce (r::polys) in
             print_endline "reduction of {";
-            List.iter (fun t ->  print_string "\t"; print t; print_newline ()) (r::polys);
+            List.iter (fun t ->  print_string "\t"; print_string (to_string t); print_newline ()) (r::polys);
             print_endline "} = {";
-            List.iter (fun t ->  print_string "\t"; print t; print_newline ()) reduced;
+            List.iter (fun t ->  print_string "\t"; print_string (to_string t); print_newline ()) reduced;
             print_string "}";
             print_newline ();
             

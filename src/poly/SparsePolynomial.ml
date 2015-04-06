@@ -20,31 +20,26 @@ module MakeSparsePolynomial (R : Ring) = struct
   type ft = R.t
   type t = (R.t * int) list
   
-  
-  let print_var (name : string) (x : t) : unit =
-    print_string "(";
-    
-    let started = List.fold_left
-      (fun started (a, n) ->
+
+  let to_string_var (name : string) (x : t) : string =
+    let s, started = List.fold_left
+      (fun (s, started) (a, n) ->
           if not (R.is_zero a) then (
-            if started then
-              print_string " + ";
-            if n = 0 || not (R.is_one a) then
-              R.print a;
-            Misc.print_mono name n;
-            true
+            let ss =
+              (if started then " + " else "") ^
+              (if n = 0 || not (R.is_one a) then R.to_string a else "") ^
+              (Misc.mono_to_string name n)
+            in
+            (s ^ ss, true)
           ) else
-            started
+            (s, started)
       )
-    false x in
+    ("", false) x in
     
-    if not started then
-      R.print (R.zero ());
-    
-    print_string ")"
+    "(" ^ (if started then s else R.to_string (R.zero ())) ^ ")"
   
-  let print (x : t) : unit =
-    print_var "x" x
+  let to_string (x : t) : string =
+    to_string_var "x" x
   
   
   let clean (x : t) : t =

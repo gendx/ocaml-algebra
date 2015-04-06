@@ -5,24 +5,18 @@ module MultiPower = struct
   type t = ((int * int) list) * int
   
   
-  let print (x : t) : unit =
-    print_string "{";
-    let _ = List.fold_left
-      (fun started (a, b) ->
-          if started then
-            print_string ", ";
-          print_string "(";
-          print_int a;
-          print_string ", ";
-          print_int b;
-          print_string ")";
+  let to_string (x : t) : string =
+    let s, _ = List.fold_left
+      (fun (s, started) (a, b) ->
+          s ^ (if started then ", " else "") ^
+          "(" ^ (string_of_int a) ^ ", " ^ (string_of_int b) ^ ")",
           true
       )
-    false (fst x) in
-    print_string "}"
+    ("", false) (fst x) in
+    "{" ^ s ^ "}"
   
-  let print_power (names : int -> string) (x : t) : unit =
-    List.iter (fun (var, k) -> Misc.print_mono (names var) k) (fst x)
+  let power_to_string (names : int -> string) (x : t) : string =
+    List.fold_left (fun s (var, k) -> s ^ (Misc.mono_to_string (names var) k)) "" (fst x)
   
   
   let make (x : (int * int) list) : t =

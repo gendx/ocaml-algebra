@@ -16,27 +16,22 @@ module MakeDiagonalMatrix (R : Ring) (Size : IntValue) = struct
   module Vector = MakeVector(R)(Size)
   
   
-  let print (x : t) : unit =
+  let to_string (x : t) : string =
+    let s = ref "" in
     for i = 0 to Size.x - 1 do
-      if i = 0 then
-        print_string "["
-      else
-        print_string " ";
+      s := !s ^
+      (if i = 0 then "[" else " ");
       
       for j = 0 to Size.x - 1 do
-        if j > 0 then
-          print_string " ";
-        if i = j then
-          R.print (Array.get x i)
-        else
-          R.print (R.zero ());
+        s := !s ^
+        (if j > 0 then " " else "") ^
+        (R.to_string (if i = j then (Array.get x i) else (R.zero ())))
       done;
       
-      if i = Size.x - 1 then
-        print_string "]"
-      else
-        print_newline ();
-    done
+      s := !s ^
+      (if i = Size.x - 1 then "]" else "\n")
+    done;
+    !s
     
     
   let zero () : t =

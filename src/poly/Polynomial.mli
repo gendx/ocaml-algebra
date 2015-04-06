@@ -4,9 +4,9 @@ module type PolynomialFunctions = sig
   type ft
   type t
   
-  (* Args        : s, x *)
-  (* Side-effect : print x with variable name s *)
-  val print_var: string -> t -> unit
+  (* Args    : s, x *)
+  (* Returns : a printable string of x with variable name s *)
+  val to_string_var: string -> t -> string
   
   (* Args    : x *)
   (* Returns : p, the polynomial whose coefficients are the elements of x *)

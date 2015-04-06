@@ -1,9 +1,9 @@
 module type AdditiveGroup = sig
   type t
   
-  (* Args        : x *)
-  (* Side-effect : print x *)
-  val print: t -> unit
+  (* Args    : x *)
+  (* Returns : a printable string of x *)
+  val to_string: t -> string
   
   (* Returns : x, the zero element *)
   (*               i.e. neutral element with respect to addition *)
