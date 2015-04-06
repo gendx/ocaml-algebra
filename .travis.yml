@@ -18,8 +18,6 @@ before_install:
   - OPAM_DEPENDS="ounit ocamlfind"
   - chmod +x install/ocaml.sh
   - sudo -E install/ocaml.sh
-  - ocaml -version
-  - opam --version
 
 install:
   - sudo apt-get update -qq
@@ -28,6 +26,10 @@ install:
   - opam init
   - opam install ${OPAM_DEPENDS}
   - eval `opam config env`
+
+before_script:
+  - ocaml -version
+  - opam --version
 
 script:
   - ocamlbuild -use-ocamlfind test/unit.native
