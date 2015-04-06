@@ -1,4 +1,4 @@
-OPAM_DEPENDS="ounit"
+OPAM_DEPENDS="ounit ocamlfind"
 
 case "$OCAML_VERSION,$OPAM_VERSION" in
 3.12.1,1.0.0) ppa=avsm/ocaml312+opam10 ;;
@@ -17,7 +17,7 @@ sudo apt-get install -qq ocaml opam
 export OPAMYES=1
 opam init
 opam install ${OPAM_DEPENDS}
-eval 'opam config env'
+eval `opam config env`
 
 ocamlbuild -use-ocamlfind test/unit.native
 ./unit.native
