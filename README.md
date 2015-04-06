@@ -1,4 +1,4 @@
-# ocaml-algebra - an algebra system written in OCaml
+# ocaml-algebra - an algebra system written in OCaml [![Build Status](https://travis-ci.org/gendx/ocaml-algebra.svg?branch=master)](https://travis-ci.org/gendx/ocaml-algebra)
 
 This algebra system makes extensive use of OCaml modules and functors, which give a nice representation of abtract algebraic types : groups, rings, fields, algebras...
 

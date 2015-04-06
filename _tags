@@ -1,0 +1,5 @@
+true : package(oUnit)
+<src> : include
+<src/linear> : include
+<src/poly> : include
+<src/structures> : include
