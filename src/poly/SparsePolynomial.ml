@@ -29,7 +29,7 @@ module MakeSparsePolynomial (R : Ring) = struct
           if not (R.is_zero a) then (
             if started then
               print_string " + ";
-            if n = 0 or not (R.is_one a) then
+            if n = 0 || not (R.is_one a) then
               R.print a;
             Misc.print_mono name n;
             true

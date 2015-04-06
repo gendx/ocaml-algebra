@@ -57,7 +57,7 @@ module MakeMultivarPolynomial (F : Field) = struct
           if not (F.is_zero a) then (
             if started then
               print_string " + ";
-            if MultiPower.is_zero n or not (F.is_one a) then
+            if MultiPower.is_zero n || not (F.is_one a) then
               F.print a;
             MultiPower.print_power names n;
             true
