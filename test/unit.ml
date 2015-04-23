@@ -4,7 +4,8 @@ let tests =
   "OCaml-algebra">:::
   [
     TestCommon.tests;
-    TestMisc.tests
+    TestFractional.tests;
+    TestMisc.tests;
   ]
 
 let _ =

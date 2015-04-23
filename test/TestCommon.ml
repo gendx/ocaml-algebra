@@ -1,37 +1,48 @@
 open OUnit
 open Common
 
-let testQ =
-  "Q" >:::
+let testZ =
+  "Z" >:::
   [
-    "make" >:::
+    "zero" >:::
     [
-      "(1)" >:: (fun test_ctxt -> assert_equal (Q.make 3 4) (Q.make (-3) (-4))) ;
-      "(2)" >:: (fun test_ctxt -> assert_equal (Q.make (-7) 2) (Q.make 7 (-2))) ;
-      "(3)" >:: (fun test_ctxt -> assert_equal (Q.make 2 (-6)) (Q.make (-3) 9))
+      "(1)" >:: (fun test_ctxt -> assert_equal (Z.zero ()) (Z.of_int 0)) ;
     ] ;
-    "add" >:::
+    "one" >:::
     [
-      "(1)" >:: (fun test_ctxt -> assert_equal (Q.add (Q.make 2 3) (Q.make 3 4)) (Q.make 17 12))
+      "(1)" >:: (fun test_ctxt -> assert_equal (Z.one ()) (Z.of_int 1)) ;
     ] ;
-    "sub" >:::
+    "is_zero" >:::
     [
-      "(1)" >:: (fun test_ctxt -> assert_equal (Q.sub (Q.make 2 3) (Q.make 3 7)) (Q.make 5 21))
+      "(1)" >:: (fun test_ctxt -> assert_equal (Z.is_zero (Z.zero ())) true) ;
+      "(2)" >:: (fun test_ctxt -> assert_equal (Z.is_zero (Z.one ())) false) ;
+      "(3)" >:: (fun test_ctxt -> assert_equal (Z.is_zero (Z.of_int 3)) false) ;
     ] ;
-    "mul" >:::
+    "is_one" >:::
     [
-      "(1)" >:: (fun test_ctxt -> assert_equal (Q.mul (Q.make 5 7) (Q.make 3 2)) (Q.make 15 14)) ;
-      "(2)" >:: (fun test_ctxt -> assert_equal (Q.mul (Q.make (-2) 3) (Q.make (-3) (-5))) (Q.make (-2) 5))
+      "(1)" >:: (fun test_ctxt -> assert_equal (Z.is_one (Z.zero ())) false) ;
+      "(2)" >:: (fun test_ctxt -> assert_equal (Z.is_one (Z.one ())) true) ;
+      "(3)" >:: (fun test_ctxt -> assert_equal (Z.is_one (Z.of_int 6)) false) ;
     ] ;
-    "div" >:::
+    "opposite" >:::
     [
-      "(1)" >:: (fun test_ctxt -> assert_equal (Q.div (Q.make 7 9) (Q.make 6 4)) (Q.make 28 54))
-    ]
+      "(1)" >:: (fun test_ctxt -> assert_equal (Z.opposite (Z.of_int 5)) (Z.of_int (-5))) ;
+      "(2)" >:: (fun test_ctxt -> assert_equal (Z.opposite (Z.of_int (-3))) (Z.of_int 3)) ;
+      "(3)" >:: (fun test_ctxt -> assert_equal (Z.opposite (Z.opposite (Z.of_int 7))) (Z.of_int 7)) ;
+    ] ;
+    "of_int" >:::
+    [
+      "(1)" >:: (fun test_ctxt -> assert_equal (Z.of_int 9) 9) ;
+    ] ;
+    "mul_int" >:::
+    [
+      "(1)" >:: (fun test_ctxt -> assert_equal (Z.mul_int 4 (Z.of_int 2)) (Z.of_int 8)) ;
+    ] ;
   ]
 
 let tests =
   "Common">:::
   [
-    testQ
+    testZ
   ]
 
