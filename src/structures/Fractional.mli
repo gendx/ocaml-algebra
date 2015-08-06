@@ -26,12 +26,12 @@ module type Fractional = sig
   (* Args    : x, y *)
   (* Returns : z = xx/yy, such that : *)
   (*               xx is the canonical representation of x in the fractional field *)
-  (*               yy is the canonical representation of x in the fractional field *)
+  (*               yy is the canonical representation of y in the fractional field *)
   val make: rt -> rt -> t
   (* Args    : x, y *)
   (* Returns : z = xx/yy, such that : *)
   (*               xx is the canonical representation of x in the fractional field *)
-  (*               yy is the canonical representation of x in the fractional field *)
+  (*               yy is the canonical representation of y in the fractional field *)
   val make_of_int: int -> int -> t
 end
 
