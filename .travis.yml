@@ -31,6 +31,5 @@ before_script:
   - opam --version
 
 script:
-  - ocamlbuild -use-ocamlfind test/unit.native
-  - ./unit.native
+  - make test
 
