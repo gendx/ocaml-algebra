@@ -38,10 +38,14 @@ module MultiPower = struct
   
   
   let make (x : (int * int) list) : t =
-    (
-      List.sort (fun (a, n) (b, m) -> a - b) x,
-      List.fold_left (fun total (_, k) -> total + k) 0 x
-    )
+    List.fold_left
+      (fun (l, s) (a, n) ->
+          if n > 0 then
+            (a, n)::l, s + n
+          else
+            l, s
+      )
+    ([], 0) (List.sort (fun (a, n) (b, m) -> b - a) x)
     
   
   let zero () : t =
@@ -84,9 +88,9 @@ module MultiPower = struct
           (b, m)::x, s + m
         ) else (
           let x, s = add_impl (q, s1 - n) (r, s2 - m) in
-          if n + m > 0 then (
+          if n + m > 0 then
             (a, n + m)::x, s + n + m
-          ) else
+          else
             x, s
         )
     in
@@ -94,17 +98,19 @@ module MultiPower = struct
     
   let rec add_var ((a, k) : int * int) ((n, s) : t) : t =
     match n with
-    | [] -> [a, k], k
+    | (b, l)::q when a > b ->
+      let x, t = add_var (a, k) (q, s - l) in
+      (b, l)::x, t + l
     | (b, l)::q when a = b ->
       if l + k > 0 then
         (a, l + k)::q, s + k
       else
         q, s - l
-    | (b, _)::q when a < b ->
-      (a, k)::n, s + k
-    | (b, l)::q ->
-      let x, s = add_var (a, k) (q, s - l) in
-      (b, l)::x, s
+    | _ ->
+      if k > 0 then
+        (a, k)::n, s + k
+      else
+        n, s
   
   
   let rec gcd ((n1, s1) : t) ((n2, s2) : t) : t =

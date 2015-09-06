@@ -39,11 +39,24 @@ module MultiPower : sig
   val is_zero: t -> bool
   
   (* Args    : x, y *)
+  (* Returns : the following result according to the lexicographic order *)
+  (*                 0 if x = y *)
+  (*               < 0 if x < y *)
+  (*               > 0 if x > y *)
+  val compare_lex: t -> t -> int
+  (* Args    : x, y *)
+  (* Returns : the following result according to the graded lexicographic order *)
+  (*                 0 if x = y *)
+  (*               < 0 if x < y *)
+  (*               > 0 if x > y *)
+  val compare_grlex: t -> t -> int
+  (* Args    : x, y *)
   (* Returns : the following result according to a compatible total order *)
   (*                 0 if x = y *)
   (*               < 0 if x < y *)
   (*               > 0 if x > y *)
   val compare: t -> t -> int
+
   (* Args    : x, y *)
   (* Returns : z, the element-wise addition of powers x and y *)
   val add: t -> t -> t
@@ -54,8 +67,6 @@ module MultiPower : sig
   (* Args    : x, y *)
   (* Returns : g, the greatest common divisor of the monomials (x, y) *)
   val gcd: t -> t -> t
-  (* Args    : x, y *)
-  (* Returns : g, the greatest common divisor of the monomials (x, y) *)
   (* Args    : x, y *)
   (* Returns : (a, b) such that : *)
   (*               a = x - g *)

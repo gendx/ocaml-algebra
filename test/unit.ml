@@ -24,6 +24,7 @@ let tests =
     TestCommon.tests;
     TestFractional.tests;
     TestMisc.tests;
+    TestMultiPower.tests;
   ]
 
 let _ =
