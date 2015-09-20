@@ -18,11 +18,28 @@
 
 open Matrix
 open Ring
+open Field
 open Vector
+open Errors
+
+module type DiagonalMatrixFunctions = sig
+  type ft
+  type t
+
+  val make: ft array -> t
+  val make_of: ('a -> ft) -> 'a array -> t
+end
 
 module type DiagonalMatrix = sig
   type ft
   include SquaredMatrix with type ft := ft and type t = ft array
+  include DiagonalMatrixFunctions with type ft := ft and type t := t
+end
+
+module type DiagonalFieldMatrix = sig
+  type ft
+  include SquaredFieldMatrix with type ft := ft and type t = ft array
+  include DiagonalMatrixFunctions with type ft := ft and type t := t
 end
 
 
@@ -35,23 +52,38 @@ module MakeDiagonalMatrix (R : Ring) (Size : IntValue) = struct
   
   
   let to_string (x : t) : string =
-    let s = ref "" in
+    let s = ref "[" in
+    let rzero = R.zero () in
+
     for i = 0 to Size.x - 1 do
-      s := !s ^
-      (if i = 0 then "[" else " ");
+      s := !s ^ "[";
       
       for j = 0 to Size.x - 1 do
         s := !s ^
-        (if j > 0 then " " else "") ^
-        (R.to_string (if i = j then (Array.get x i) else (R.zero ())))
+          (if j > 0 then " " else "") ^
+          (R.to_string (if i = j then x.(i) else rzero))
       done;
       
-      s := !s ^
-      (if i = Size.x - 1 then "]" else "\n")
+      s := !s ^ "]" ^
+        (if i = Size.x - 1 then "]" else " ")
     done;
     !s
     
     
+  let check_dim (x : 'a array) : bool =
+    Array.length x = Size.x
+
+  let make (x : R.t array) : t =
+    if not (check_dim x) then
+      raise Errors.Invalid_dimension;
+    x
+
+  let make_of (f : 'a -> R.t) (x : 'a array) : t =
+    if not (check_dim x) then
+      raise Errors.Invalid_dimension;
+    Array.map f x
+
+
   let zero () : t =
     Array.make Size.x (R.zero ())
   
@@ -79,16 +111,36 @@ module MakeDiagonalMatrix (R : Ring) (Size : IntValue) = struct
     
   
   let add (x : t) (y : t) : t =
-    Array.mapi (fun i z -> R.add z (Array.get y i)) x
+    Array.mapi (fun i z -> R.add z y.(i)) x
   
   let sub (x : t) (y : t) : t =
-    Array.mapi (fun i z -> R.sub z (Array.get y i)) x
+    Array.mapi (fun i z -> R.sub z y.(i)) x
   
   let mul (x : t) (y : t) : t =
-    Array.mapi (fun i z -> R.mul z (Array.get y i)) x
+    Array.mapi (fun i z -> R.mul z y.(i)) x
     
     
+  let transpose (x : t) : t =
+    x
+
+  let trace (x : t) : R.t =
+    Array.fold_left (fun result y -> R.add result y) (R.zero ()) x
+
   let mul_vect (x : t) (v : Vector.t) : Vector.t =
-    Array.mapi (fun i z -> R.mul z (Array.get v i)) x
+    Array.mapi (fun i z -> R.mul z v.(i)) x
   
+end
+
+
+module MakeDiagonalFieldMatrix (F : Field) (Size : IntValue) = struct
+
+  include MakeDiagonalMatrix(F)(Size)
+
+
+  let determinant (x : t) : F.t =
+    Array.fold_left (fun result y -> F.mul result y) (F.one ()) x
+
+  let inverse (x : t) : t =
+    Array.map F.inverse x
+ 
 end

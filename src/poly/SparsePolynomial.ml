@@ -122,7 +122,7 @@ module MakeSparsePolynomial (R : Ring) = struct
     clean (List.map (fun (a, n) -> (R.mul_int i a, n)) x)
   
   let mul_field (lambda : R.t) (x : t) : t =
-    List.map (fun (a, n) -> (R.mul lambda a, n)) x
+    clean (List.map (fun (a, n) -> (R.mul lambda a, n)) x)
   
   
   let add (x : t) (y : t) : t =

@@ -18,18 +18,42 @@
 
 open Matrix
 open Ring
+open Field
 open Vector
+
+module type ArrayMatrixFunctions = sig
+  type ft
+  type t
+  type vect_t
+  
+  (* Args    : x *)
+  (* Returns : m, the matrix whose coefficients are the elements of x *)
+  val make: ft array array -> t
+  (* Args    : f, x *)
+  (* Returns : m, the matrix whose coefficients are the elements of x mapped by f *)
+  val make_of: ('a -> ft) -> 'a array array -> t
+  (* Args    : x, y *)
+  (* Returns : m, the matrix given by the tensorial product of x and y *)
+  (*               i.e. m = x.y^T *)
+  val of_vects: vect_t -> vect_t -> t
+end
 
 module type ArrayMatrix = sig
   type ft
   include SquaredMatrix with type ft := ft and type t = ft array array
-  
-  (* Args    : x, y *)
-  (* Returns : m, the matrix given by the tensorial product of x and y *)
-  (*               i.e. m = x.y^T *)
-  val of_vects: Vector.t -> Vector.t -> t
+  include ArrayMatrixFunctions with type ft := ft and type t := t and type vect_t := Vector.t
+end
+
+module type ArrayFieldMatrix = sig
+  type ft
+  include SquaredFieldMatrix with type ft := ft and type t = ft array array
+  include ArrayMatrixFunctions with type ft := ft and type t := t and type vect_t := Vector.t
 end
 
 
 module MakeArrayMatrix (R : Ring) (Size : IntValue) :
   ArrayMatrix with type ft = R.t
+
+module MakeArrayFieldMatrix (F : Field) (Size : IntValue) :
+  ArrayFieldMatrix with type ft = F.t
+

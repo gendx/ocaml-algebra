@@ -24,6 +24,7 @@ open SparsePolynomial
 open MultivarPolynomial
 open GCD
 open Misc
+open Errors
 
 module rec Z :
   EuclidianRing with type t = int
@@ -52,6 +53,8 @@ module rec Z :
   
   
   let quorem (x : t) (y : t) : (t * t) =
+    if y = 0 then
+      raise Errors.Not_inversible;
     if x >= 0 then
       (x / y, x mod y)
     else (
@@ -76,7 +79,10 @@ module rec Z :
     (quo x g, quo y g)
   
   let bezout (x : t) (y : t) : (t * t * t) =
-    GCDImpl.bezout comp (fst (normalize x)) (fst (normalize y))
+    let xx, ux = normalize x in
+    let yy, uy = normalize y in
+    let a, b, g = GCDImpl.bezout comp xx yy in
+    (a * ux, b * uy, g)
   
 end
 

@@ -18,6 +18,7 @@
 
 open VectorSpace
 open Ring
+open Errors
 
 module type IntValue = sig val x: int end
 
@@ -26,9 +27,10 @@ module type Vector = sig
   type t = ft array
   
   include VectorSpace with type ft := ft and type t := t
-  
-  (* Args    : x, y *)
-  (* Returns : z, the dot product of x and y *)
+
+  val make: ft array -> t
+  val make_of: ('a -> ft) -> 'a array -> t
+
   val dot: t -> t -> ft
 end
 
@@ -44,30 +46,32 @@ module MakeVector (R : Ring) (Size : IntValue) = struct
     for i = 0 to Size.x - 1 do
       s := !s ^
       (if i > 0 then " " else "") ^
-      (R.to_string (Array.get x i))
+      (R.to_string x.(i))
     done;
     !s ^ "]"
+
+
+  let make (x : R.t array) : t =
+    if Array.length x != Size.x then
+      raise Errors.Invalid_dimension;
+    x
+
+  let make_of (f : 'a -> R.t) (x : 'a array) : t =
+    if Array.length x != Size.x then
+      raise Errors.Invalid_dimension;
+    Array.map f x
     
     
   let zero () : t =
     Array.make Size.x (R.zero ())
-  
-  let one () : t =
-    Array.make Size.x (R.one ())
-  
+ 
   let is_zero (x : t) : bool =
     Array.fold_left (fun result y -> result && (R.is_zero y)) true x
   
-  let is_one (x : t) : bool =
-    Array.fold_left (fun result y -> result && (R.is_one y)) true x
-    
     
   let opposite (x : t) : t =
     Array.map R.opposite x
     
-  let of_int (i : int) : t =
-    Array.make Size.x (R.of_int i)
-  
   let mul_int (i : int) (x : t) : t =
     Array.map (R.mul_int i) x
   
@@ -76,21 +80,17 @@ module MakeVector (R : Ring) (Size : IntValue) = struct
     
   
   let add (x : t) (y : t) : t =
-    Array.mapi (fun i z -> R.add z (Array.get y i)) x
+    Array.mapi (fun i z -> R.add z y.(i)) x
   
   let sub (x : t) (y : t) : t =
-    Array.mapi (fun i z -> R.sub z (Array.get y i)) x
-  
-  let mul (x : t) (y : t) : t =
-    Array.mapi (fun i z -> R.mul z (Array.get y i)) x
-    
+    Array.mapi (fun i z -> R.sub z y.(i)) x
+   
     
   let dot (x : t) (y : t) : ft =
-    let result, _ = Array.fold_left
-      (fun (result, i) z ->
-          (R.add result (R.mul z (Array.get y i)), i + 1)
-      )
-    (R.zero (), 0) x
-    in result
+    let result = ref (R.zero ()) in
+    for i = 0 to Size.x - 1 do
+      result := R.add !result (R.mul x.(i) y.(i))
+    done;
+    !result
   
 end

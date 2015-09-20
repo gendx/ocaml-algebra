@@ -3,3 +3,6 @@ true : package(oUnit)
 <src/linear> : include
 <src/poly> : include
 <src/structures> : include
+<test/structures> : include
+<test/linear> : include
+<test/poly> : include

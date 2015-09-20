@@ -26,7 +26,14 @@ module type Vector = sig
   type t = ft array
   
   include VectorSpace with type ft := ft and type t := t
-  
+
+  (* Args    : x *)
+  (* Returns : v, the vector whose coefficients are the elements of x *)
+  val make: ft array -> t
+  (* Args    : f, x *)
+  (* Returns : v, the vector whose coefficients are the elements of x mapped by f *)
+  val make_of: ('a -> ft) -> 'a array -> t
+
   (* Args    : x, y *)
   (* Returns : z, the dot product of x and y *)
   val dot: t -> t -> ft

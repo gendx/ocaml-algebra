@@ -181,8 +181,8 @@ module MakeMultivarPolynomial (F : Field) = struct
   
   let mul (x : t) (y : t) : t =
     clean (List.fold_left
-            (fun p a -> add (mul_monom a y) p)
-          [] x)
+      (fun p a -> add (mul_monom a y) p)
+    [] x)
   
   
   let derivate (deriv : t array) (x : t) : t =

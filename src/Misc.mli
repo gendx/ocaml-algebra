@@ -17,6 +17,7 @@
 *)
 
 module Misc : sig
+
   (* Args    : f, g, h, a, b *)
   (* Returns : c the list such that each element is : *)
   (*               (f a_i b_i) if i < min(len(a), len(b)) *)

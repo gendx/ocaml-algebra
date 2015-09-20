@@ -18,10 +18,14 @@
 
 open OUnit
 open Common
+open TestField
+
+module TestFieldQ = TestField(Q)
 
 let testQ =
   "Q" >:::
-  [
+  (TestFieldQ.test (Q.make 1 2) (Q.make 3 4) (Q.make 5 7))
+  @ [
     "to_string" >:::
     [
       "(1)" >:: (fun _ -> assert_equal
@@ -78,27 +82,9 @@ let testQ =
           (Q.one ())
           (Q.make (-3) (-3))) ;
     ] ;
-    "is_zero" >:::
-    [
-      "(1)" >:: (fun _ -> assert_equal
-          (Q.is_zero (Q.zero ()))
-          true) ;
-      "(2)" >:: (fun _ -> assert_equal
-          (Q.is_zero (Q.one ()))
-          false) ;
-      "(3)" >:: (fun _ -> assert_equal
-          (Q.is_zero (Q.make 3 4))
-          false) ;
-    ] ;
     "is_one" >:::
     [
       "(1)" >:: (fun _ -> assert_equal
-          (Q.is_one (Q.zero ()))
-          false) ;
-      "(2)" >:: (fun _ -> assert_equal
-          (Q.is_one (Q.one ()))
-          true) ;
-      "(3)" >:: (fun _ -> assert_equal
           (Q.is_one (Q.make 3 4))
           false) ;
     ] ;
@@ -106,29 +92,14 @@ let testQ =
     "opposite" >:::
     [
       "(1)" >:: (fun _ -> assert_equal
-          (Q.opposite (Q.zero ()))
-          (Q.zero ())) ;
-      "(2)" >:: (fun _ -> assert_equal
           (Q.opposite (Q.make 2 3))
           (Q.make (-2) 3)) ;
-      "(3)" >:: (fun _ -> assert_equal
-          (Q.opposite (Q.opposite (Q.make 17 12)))
-          (Q.make 17 12)) ;
     ] ;
     "inverse" >:::
     [
       "(1)" >:: (fun _ -> assert_equal
-          (Q.inverse (Q.one ()))
-          (Q.one ())) ;
-      "(2)" >:: (fun _ -> assert_equal
           (Q.inverse (Q.make 5 7))
           (Q.make 7 5)) ;
-      "(3)" >:: (fun _ -> assert_equal
-          (Q.inverse (Q.inverse (Q.make 17 12)))
-          (Q.make 17 12)) ;
-      "(4)" >:: (fun _ -> assert_raises
-          Division_by_zero
-          (fun () -> Q.inverse (Q.zero ()))) ;
     ] ;
     "of_int" >:::
     [
@@ -184,15 +155,12 @@ let testQ =
       "(2)" >:: (fun _ -> assert_equal
           (Q.div (Q.make 3 4) (Q.make 5 6))
           (Q.mul (Q.make 3 4) (Q.make 6 5))) ;
-      "(3)" >:: (fun _ -> assert_raises
-          Division_by_zero
-          (fun () -> Q.div (Q.make 3 4) (Q.zero ()))) ;
     ] ;
   ]
 
 let tests =
-  "Fractional">:::
+  "Fractional" >:::
   [
-    testQ
+    testQ ;
   ]
 

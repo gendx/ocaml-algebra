@@ -25,8 +25,26 @@ module type SquaredMatrix = sig
   
   include Algebra with type ft := ft and type t := t
   
+  (* Args    : x *)
+  (* Returns : y, the transpose of matrix x *)
+  val transpose: t -> t
+  (* Args    : x *)
+  (* Returns : y, the trace of matrix x *)
+  val trace: t -> ft
+
   module Vector : Vector with type ft := ft
   (* Args    : x, y *)
   (* Returns : z, the product of x and y *)
   val mul_vect: t -> Vector.t -> Vector.t
+end
+
+module type SquaredFieldMatrix = sig
+  include SquaredMatrix
+
+  (* Args    : x *)
+  (* Returns : y, the determinant of matrix x *)
+  val determinant: t -> ft
+  (* Args    : x *)
+  (* Returns : y, the inverse of x with respect to multiplication *)
+  val inverse: t -> t
 end

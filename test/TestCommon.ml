@@ -18,10 +18,14 @@
 
 open OUnit
 open Common
+open TestEuclidianRing
+
+module TestEuclidianRingZ = TestEuclidianRing(Z)
 
 let testZ =
   "Z" >:::
-  [
+  (TestEuclidianRingZ.test (Z.of_int (-2)) (Z.of_int 3) (Z.of_int 5))
+  @ [
     "zero" >:::
     [
       "(1)" >:: (fun _ -> assert_equal
@@ -34,41 +38,18 @@ let testZ =
           (Z.one ())
           (Z.of_int 1)) ;
     ] ;
-    "is_zero" >:::
-    [
-      "(1)" >:: (fun _ -> assert_equal
-          (Z.is_zero (Z.zero ()))
-          true) ;
-      "(2)" >:: (fun _ -> assert_equal
-          (Z.is_zero (Z.one ()))
-          false) ;
-      "(3)" >:: (fun _ -> assert_equal
-          (Z.is_zero (Z.of_int 3))
-          false) ;
-    ] ;
     "is_one" >:::
     [
       "(1)" >:: (fun _ -> assert_equal
-          (Z.is_one (Z.zero ()))
-          false) ;
-      "(2)" >:: (fun _ -> assert_equal
-          (Z.is_one (Z.one ()))
-          true) ;
-      "(3)" >:: (fun _ -> assert_equal
           (Z.is_one (Z.of_int 6))
           false) ;
     ] ;
+
     "opposite" >:::
     [
       "(1)" >:: (fun _ -> assert_equal
           (Z.opposite (Z.of_int 5))
           (Z.of_int (-5))) ;
-      "(2)" >:: (fun _ -> assert_equal
-          (Z.opposite (Z.of_int (-3)))
-          (Z.of_int 3)) ;
-      "(3)" >:: (fun _ -> assert_equal
-          (Z.opposite (Z.opposite (Z.of_int 7)))
-          (Z.of_int 7)) ;
     ] ;
     "of_int" >:::
     [
@@ -85,8 +66,8 @@ let testZ =
   ]
 
 let tests =
-  "Common">:::
+  "Common" >:::
   [
-    testZ
+    testZ ;
   ]
 

@@ -16,20 +16,9 @@
     along with this program.  If not, see http://www.gnu.org/licenses/gpl-3.0.txt
 *)
 
-open OUnit
+module Errors = struct
 
-let tests =
-  "OCaml-algebra" >:::
-  [
-    TestCommon.tests;
-    TestFractional.tests;
-    TestMisc.tests;
-    TestMultiPower.tests;
-    TestVector.tests;
-    TestMatrix.tests;
-    TestPolynomial.tests;
-  ]
+exception Not_inversible
+exception Invalid_dimension
 
-let _ =
-  run_test_tt_main tests
-
+end

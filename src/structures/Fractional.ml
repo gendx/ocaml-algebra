@@ -18,6 +18,7 @@
 
 open EuclidianRing
 open Field
+open Errors
 
 module type Fractional = sig
   type rt
@@ -70,7 +71,7 @@ module MakeFractional (R : EuclidianRing) = struct
   
   let inverse ((p, q) : t) : t =
     if R.is_zero p then
-      raise Division_by_zero;
+      raise Errors.Not_inversible;
     let u = R.unit_part p in
     (R.mul u q, R.mul u p)
   
@@ -104,7 +105,7 @@ module MakeFractional (R : EuclidianRing) = struct
   
   let div ((p1, q1) : t) ((p2, q2) : t) : t =
     if R.is_zero p2 then
-      raise Division_by_zero;
+      raise Errors.Not_inversible;
     let a1, b2 = R.gcd_reduction p1 p2 in
     let a2, b1 = R.gcd_reduction q2 q1 in
     let u = R.unit_part p2 in

@@ -18,13 +18,37 @@
 
 open Matrix
 open Ring
+open Field
 open Vector
+
+module type DiagonalMatrixFunctions = sig
+  type ft
+  type t
+
+  (* Args    : x *)
+  (* Returns : m, the matrix whose diagonal coefficients are the elements of x *)
+  val make: ft array -> t
+  (* Args    : f, x *)
+  (* Returns : m, the matrix whose diagonal coefficients are the elements of x mapped by f *)
+  val make_of: ('a -> ft) -> 'a array -> t
+end
 
 module type DiagonalMatrix = sig
   type ft
   include SquaredMatrix with type ft := ft and type t = ft array
+  include DiagonalMatrixFunctions with type ft := ft and type t := t
+end
+
+module type DiagonalFieldMatrix = sig
+  type ft
+  include SquaredFieldMatrix with type ft := ft and type t = ft array
+  include DiagonalMatrixFunctions with type ft := ft and type t := t
 end
 
 
 module MakeDiagonalMatrix (R : Ring) (Size : IntValue) :
   DiagonalMatrix with type ft = R.t
+
+module MakeDiagonalFieldMatrix (F : Field) (Size : IntValue) :
+  DiagonalFieldMatrix with type ft = F.t
+

@@ -1,5 +1,7 @@
+all: unit.native
+
 test: unit.native
-	./unit.native
+	./unit.native -verbose
 
 unit.native:
 	ocamlbuild -use-ocamlfind test/unit.native

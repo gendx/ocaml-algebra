@@ -131,7 +131,7 @@ module MakeListPolynomial (R : Ring) = struct
     clean (Misc.map3 R.add (fun x -> x) (fun x -> x) x y)
   
   let sub (x : t) (y : t) : t =
-    clean	(Misc.map3 R.sub (fun x -> x) R.opposite x y)
+    clean (Misc.map3 R.sub (fun x -> x) R.opposite x y)
   
   let shift_one (x : t) : t =
     match x with
